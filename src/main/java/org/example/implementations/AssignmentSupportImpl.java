@@ -4,6 +4,7 @@ import org.example.exceptions.InsufficientFundsException;
 import org.example.interfaces.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,7 +25,6 @@ public class AssignmentSupportImpl implements AssignmentSupport {
         Department department = this.departmentSupport.getDepartments().get(departmentId);
         Employee employee = this.employeeSupport.getEmployees().get(employeeId);
         if(department.getRemainingBudget() >= employee.getEmployeeSalary()) {
-            department.updateBudget(employee.getEmployeeSalary());
             ArrayList<String> employees = new ArrayList<>();
             if(hiredEmployees.containsKey(departmentId)) {
                 employees = hiredEmployees.get(departmentId);
@@ -33,6 +33,7 @@ public class AssignmentSupportImpl implements AssignmentSupport {
                 employees.add(Integer.toString(employeeId));
             }
             hiredEmployees.put(departmentId, employees);
+            department.updateBudget(department.getYearlyBudget() - getEmployeesSalariesForBudgetUpdate(departmentId));
         } else {
             String errorMsg = String.format(
                 "Unable to add employee %d to department %d as there is not enough budget!",
@@ -43,6 +44,17 @@ public class AssignmentSupportImpl implements AssignmentSupport {
         }
     }
 
+    @Override
+    public double getEmployeesSalariesForBudgetUpdate(int departmentId) {
+        double employeeSalaries = 0f;
+        String hiredEmployees = this.getHiredEmployees(departmentId);
+        ArrayList<Integer> employeeIds = Arrays.stream(hiredEmployees.split(", ")).map(Integer::valueOf).collect(Collectors.toCollection(ArrayList::new));
+        for (Integer employeeId : employeeIds) {
+           Employee employee = employeeSupport.getEmployeeById(employeeId);
+           employeeSalaries += employee.getEmployeeSalary();
+        }
+        return employeeSalaries;
+    }
     @Override
     public String getHiredEmployees(int departmentId) {
         String hiredEmployees = this.hiredEmployees.get(departmentId).stream().collect(Collectors.joining(", "));

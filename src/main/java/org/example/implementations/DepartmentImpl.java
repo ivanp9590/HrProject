@@ -5,10 +5,10 @@ import org.example.interfaces.Department;
 public class DepartmentImpl implements Department {
     private int departmentId;
     private String departmentName;
-    private int yearlyBudget;
+    private double yearlyBudget;
 
-    private int remainingBudget;
-    public DepartmentImpl(int departmentId, String departmentName, int yearlyBudget) {
+    private double remainingBudget;
+    public DepartmentImpl(int departmentId, String departmentName, double yearlyBudget) {
         this.departmentId = departmentId;
         this.departmentName = departmentName;
         this.yearlyBudget = yearlyBudget;
@@ -26,17 +26,28 @@ public class DepartmentImpl implements Department {
     }
 
     @Override
-    public int getYearlyBudget() {
+    public double getYearlyBudget() {
         return yearlyBudget;
     }
 
     @Override
-    public int getRemainingBudget() {
+    public double getRemainingBudget() {
         return remainingBudget;
     }
 
     @Override
-    public void updateBudget(double expense) {
-        this.remainingBudget -= expense;
+    public void setYearlyBudget(int budget) {
+        this.yearlyBudget = budget;
+        this.remainingBudget = budget;
+    }
+
+    @Override
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    @Override
+    public void updateBudget(double remaining) {
+        this.remainingBudget = remaining;
     }
 }

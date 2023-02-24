@@ -5,9 +5,13 @@ public interface Department {
 
     String getDepartmentName();
 
-    int getYearlyBudget();
+    double getYearlyBudget();
 
-    int getRemainingBudget();
+    double getRemainingBudget();
 
-    void updateBudget(double expense);
+    void setYearlyBudget(int budget);
+
+    void setDepartmentName(String departmentName);
+
+    void updateBudget(double remaining);
 }
